@@ -1,4 +1,4 @@
-import { MarkdownView, Plugin, TFile, WorkspaceLeaf, } from 'obsidian';
+import { MarkdownView, Plugin, TFile, WorkspaceLeaf } from 'obsidian';
 import { BannerData, DeviceSettings, PropertySettings, SimpleBannerSettings } from './types/interfaces';
 import { CSSClasses, CSSValue, ViewMode } from './types/enums';
 import Settings from './settings/settings';
@@ -46,6 +46,7 @@ export default class SimpleBanner extends Plugin {
 		this.featPluginInterop = new PluginInterOp(this, this.deviceSettings);
 
 		workspace.onLayoutReady(() => {
+			this.registerEvent(workspace.on('window-open', this.handleWindowOpen.bind(this)));
 			this.registerEvent(workspace.on('layout-change', this.handleLayoutChange.bind(this)));
 			this.registerEvent(workspace.on('file-open', this.handleFileOpen.bind(this)));
 			this.registerEvent(app.metadataCache.on('changed', this.handleMetaChange.bind(this)));
@@ -291,6 +292,16 @@ export default class SimpleBanner extends Plugin {
 	//----------------------------------
 	// Event Handlers
 	//----------------------------------
+	handleWindowOpen() {
+		const val = setInterval(() => {
+			const view = this.getActiveView();
+			if (view) {
+				clearInterval(val);
+				this.handleLayoutChange();
+			}
+		}, 100);
+	}
+
 	handleLayoutChange() {
 		const view = this.getActiveView();
 		if (view) {
@@ -331,10 +342,13 @@ export default class SimpleBanner extends Plugin {
 			const metas = document.querySelectorAll('.workspace-leaf-content[data-sb] .metadata-container');
 			if (inlines.length > 0 && metas.length > 0) {
 				inlines.forEach((inline, idx) => {
-					if (reset) {
-						inline.after(metas[idx]);
-					} else {
-						inline.before(metas[idx]);
+					const el = metas[idx];
+					if (el) {
+						if (reset) {
+							inline.after(metas[idx]);
+						} else {
+							inline.before(metas[idx]);
+						}
 					}
 				})
 			}
