@@ -8,9 +8,8 @@ div.simple-banner {
 	width: calc(100% - (var(--sb-padding) * 2));
 	height: 100%;
 	margin-left: var(--sb-padding);
-	max-height: var(--sb-height);
+	max-height: calc(var(--sb-height) - 24px);
 	padding: var(--size-4-3) var(--size-4-3) 0 var(--size-4-3);
-	transform: translate3d(0,0,0);
 	user-select: none;
 
 	& > video {
@@ -20,12 +19,8 @@ div.simple-banner {
 		height: 100%;
 		object-fit: cover;
 		z-index: 2;
-		animation: fade-in 0.7s linear forwards, banner-anim 0.8s ease-out;
 		object-position: calc(50% + var(--sb-img-x)) calc(50% + var(--sb-img-y));
 		border-radius: var(--sb-radius);
-		transition: object-position 0.5s ease-in-out;
-		will-change: object-position;
-		transform: translate3d(0,0,0);
 	}
 
 	&:before {
@@ -41,12 +36,7 @@ div.simple-banner {
 		background-size: var(--sb-size);
 		background-position-x: calc(50% + var(--sb-img-x));
 		background-position-y: calc(50% + var(--sb-img-y));
-		animation: fade-in 0.7s linear forwards, banner-anim 0.8s ease-out;
-		transition: background-position-x 0.5s ease-in-out, background-position-y 0.5s ease-in-out;
-		will-change: transform, background-position-x, background-position-y;
-		transform-style: preserve-3d;
 		backface-visibility: hidden;
-		transform: translate3d(0,0,0);
 	}
 
 	&:after {
@@ -57,7 +47,6 @@ div.simple-banner {
 		border-radius: var(--sb-radius);
 		background: var(--sb-mask);
 		background: var(--sb-mask-webkit);
-		transform: translate3d(0,0,0);
 		overflow: hidden;
 	}
 
@@ -78,3 +67,4 @@ body {
 		}
 	}
 }
+
